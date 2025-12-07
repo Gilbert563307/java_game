@@ -1,0 +1,28 @@
+spring.application.name=java_game
+
+
+#behaivour for how application works
+#configure for application to connect to database #mapped first port in docker compose file
+#names comes from the init sql file in the database mount folder
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+
+#return message on param  https://www.baeldung.com/spring-response-status-exception
+
+
+
+#driver name
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+#specify hibernate #wipe db when we start app
+spring.jpa.hibernate.ddl-auto=create-drop
+
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.format_sql=true
+
+#show sql
+spring.jpa.show-sql=true
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+logging.level.org.hibernate.orm.jdbc.bind=TRACE
