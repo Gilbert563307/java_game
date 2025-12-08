@@ -4,31 +4,37 @@ import java.util.List;
 
 import com.game.java_game.minecraft.domain.enums.Direction;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+
+@Entity
 public class Game {
+    @Id
+    @GeneratedValue
     private Long id;
+    @OneToOne(targetEntity = World.class, cascade = CascadeType.ALL, orphanRemoval = true)
     private World world;
     private boolean gameStarted;
+    @OneToOne(targetEntity = Session.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Session session;
 
     public Game() {
 
     }
 
-    public Game(Long id) {
+    public Game(Long id, World world) {
         this.id = id;
-        this.world = null;
-        this.gameStarted = false;
+        this.world = world;
     }
 
-    public void startGame(World world) {
+    public void startGame(List<Player> players) {
         if (this.gameStarted) {
             throw new RuntimeException("Game has already started");
         }
-
-        if (world == null) {
-            this.world = new World(null, "Your world");
-        } else {
-            this.world = world;
-        }
+        this.session = new Session(null, players);
         this.gameStarted = true;
     }
 
@@ -36,18 +42,18 @@ public class Game {
         if (!this.gameStarted) {
             throw new RuntimeException("You cannot join the game while its not started");
         }
-        this.world.join(player);
+        this.session.join(player);
     }
 
     public void leaveGame(Player player) {
         if (!this.gameStarted) {
             throw new RuntimeException("You cannot leave the game while its not started");
         }
-        this.world.leave(player);
+        this.session.leave(player);
     }
 
     public void movePlayer(Player player, Direction direction) {
-        boolean isPlayerInCurrentSession = this.world.isPlayerInWorld(player);
+        boolean isPlayerInCurrentSession = this.session.isPlayerInSession(player);
         if (!isPlayerInCurrentSession) {
             throw new RuntimeException("You cannot move a player who is not in the game");
         }
@@ -55,7 +61,7 @@ public class Game {
     }
 
     public void pickUpItem(Player player, Item item) {
-        boolean isPlayerInCurrentSession = this.world.isPlayerInWorld(player);
+        boolean isPlayerInCurrentSession = this.session.isPlayerInSession(player);
         if (!isPlayerInCurrentSession) {
             throw new RuntimeException("You cannot move pick up an item. Because you are not in a game");
         }
@@ -63,7 +69,7 @@ public class Game {
     }
 
     public void dropUpItem(Player player, Item item) {
-        boolean isPlayerInCurrentSession = this.world.isPlayerInWorld(player);
+        boolean isPlayerInCurrentSession = this.session.isPlayerInSession(player);
         if (!isPlayerInCurrentSession) {
             throw new RuntimeException("You cannot move pick up an item. Because you are not in a game");
         }
@@ -71,14 +77,30 @@ public class Game {
     }
 
     public List<String> getPlayerList() {
-        return this.world.getPlayersNames();
+        return this.session.getPlayersNames();
     }
 
-    public World getWorld() {
+    private World getWorld() {
         return this.world;
     }
 
-    public void quitGme() {
+    public String getWorldName(){
+        return this.world.getName();
+    }
+
+    public Long getId(){
+        return this.id;
+    }
+
+    public List<Item> getLootItems(){
+        return this.world.getLootItems();
+    }
+
+    public List<Player> getPlayers(){
+        return this.session.getPlayerList();
+    }
+
+    public void quitGame() {
         this.gameStarted = false;
         this.world = null;
     }

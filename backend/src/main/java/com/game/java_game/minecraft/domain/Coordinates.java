@@ -2,7 +2,14 @@ package com.game.java_game.minecraft.domain;
 
 import com.game.java_game.minecraft.domain.enums.Direction;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
 public class Coordinates {
+    @Id
+    @GeneratedValue
     private Long id;
     private int y;
     private int x;
@@ -38,6 +45,16 @@ public class Coordinates {
         return this.y;
     }
 
+    public void remove() {
+        this.x = 0;
+        this.y = 0;
+    }
+
+    public void add(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public void update(Direction direction) {
         switch (direction) {
         case UP:
@@ -67,13 +84,4 @@ public class Coordinates {
                 """, this.getX(), this.getY());
     }
 
-    public void remove() {
-        this.x = 0;
-        this.y = 0;
-    }
-
-    public void add(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
 }

@@ -3,8 +3,19 @@ package com.game.java_game.minecraft.domain;
 import java.util.Collections;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+@Entity
 public class Inventory {
+    @Id
+    @GeneratedValue
     private Long id;
+
+    @OneToMany(targetEntity= Item.class, cascade= CascadeType.ALL, orphanRemoval=true)
     private List<Item> inventoryItems;
 
     public Inventory() {

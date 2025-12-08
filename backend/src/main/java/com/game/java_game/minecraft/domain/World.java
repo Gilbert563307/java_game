@@ -1,16 +1,26 @@
 package com.game.java_game.minecraft.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+@Entity
 public class World {
+    @Id
+    @GeneratedValue
     private Long id;
     private String name;
+    @OneToMany(targetEntity = Item.class, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> lootItems;
-    private List<Player> playerList;
 
-    // World size 
+    // World size
     public static final int WORLD_WIDTH = 100;
     public static final int WORLD_HEIGHT = 100;
 
@@ -22,7 +32,7 @@ public class World {
         this.id = id;
         this.name = name;
         this.lootItems = new ArrayList<>();
-        this.playerList = new ArrayList<>();
+
         this.loadRandomItemsInGame();
     }
 
@@ -34,46 +44,29 @@ public class World {
         return name;
     }
 
-    public void join(Player player) {
-        if (!this.playerList.contains(player)) {
-            this.playerList.add(player);
-        }
+    public List<Item> getLootItems() {
+        return Collections.unmodifiableList(this.lootItems);
     }
-
-    public void leave(Player player) {
-        if (!this.playerList.contains(player)) {
-            this.playerList.remove(player);
-        }
-    }
-
-    public boolean isPlayerInWorld(Player player) {
-        return this.playerList.contains(player);
-    }
-
-    public List<String> getPlayersNames() {
-        return this.playerList.stream().map(Player::getUsername).toList();
-    }
-
 
     private void loadRandomItemsInGame() {
         Random random = new Random();
 
-        lootItems.add(createItem(0L, "Apple", random));
-        lootItems.add(createItem(1L, "Wood", random));
-        lootItems.add(createItem(2L, "Stone", random));
-        lootItems.add(createItem(3L, "Iron Ore", random));
-        lootItems.add(createItem(4L, "Gold Ore", random));
-        lootItems.add(createItem(5L, "Diamond", random));
-        lootItems.add(createItem(6L, "Stick", random));
-        lootItems.add(createItem(7L, "Torch", random));
-        lootItems.add(createItem(8L, "Bread", random));
-        lootItems.add(createItem(9L, "Leather", random));
-        lootItems.add(createItem(10L, "Coal", random));
-        lootItems.add(createItem(11L, "Sword", random));
-        lootItems.add(createItem(12L, "Pickaxe", random));
-        lootItems.add(createItem(13L, "Bow", random));
-        lootItems.add(createItem(14L, "Arrow", random));
-        lootItems.add(new Item(99L, "Magic brush", new Coordinates(99L, 2, 2)));
+        lootItems.add(createItem(null, "Apple", random));
+        lootItems.add(createItem(null, "Wood", random));
+        lootItems.add(createItem(null, "Stone", random));
+        lootItems.add(createItem(null, "Iron Ore", random));
+        lootItems.add(createItem(null, "Gold Ore", random));
+        lootItems.add(createItem(null, "Diamond", random));
+        lootItems.add(createItem(null, "Stick", random));
+        lootItems.add(createItem(null, "Torch", random));
+        lootItems.add(createItem(null, "Bread", random));
+        lootItems.add(createItem(null, "Leather", random));
+        lootItems.add(createItem(null, "Coal", random));
+        lootItems.add(createItem(null, "Sword", random));
+        lootItems.add(createItem(null, "Pickaxe", random));
+        lootItems.add(createItem(null, "Bow", random));
+        lootItems.add(createItem(null, "Arrow", random));
+        lootItems.add(new Item(null, "Magic brush", new Coordinates(null, 0, 0)));
     }
 
     private Item createItem(Long itemId, String name, Random random) {
@@ -84,13 +77,4 @@ public class World {
         return new Item(itemId, name, coordinates);
     }
 
-    public List<Item> getLootItems() {
-        return lootItems;
-    }
-
-    public List<Player> getPlayerList() {
-        return playerList;
-    }
-
-  
 }

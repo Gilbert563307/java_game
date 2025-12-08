@@ -1,0 +1,29 @@
+### create a world
+POST http://localhost:8080/api/v1/game
+Content-Type: application/json
+X-User: steve
+
+{
+  "name": "world 2"
+}
+
+
+### join a world
+POST http://localhost:8080/api/v1/player/game/1
+Content-Type: application/json
+X-User: James
+
+
+
+### leave a world
+PUT http://localhost:8080/api/v1/player/game/1
+Content-Type: application/json
+X-User: James
+
+
+### get a world status
+GET http://localhost:8080/api/v1/game/1
+Content-Type: application/json
+X-User: steve
+
+

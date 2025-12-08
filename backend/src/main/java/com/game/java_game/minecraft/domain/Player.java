@@ -2,9 +2,23 @@ package com.game.java_game.minecraft.domain;
 
 import com.game.java_game.minecraft.domain.enums.Direction;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
 public class Player extends Character {
+    @Id
+    @GeneratedValue
     private Long id;
+    @Column(unique=true)
     private String username;
+
+
+    public Player() {
+        // super();
+    }
 
     public Player(Long id, String username, int health, int experience, Inventory inventory, Coordinates coordinates) {
         super(health, experience, inventory, coordinates);
