@@ -1,0 +1,34 @@
+package com.game.java_game.minecraft.domain;
+
+import java.util.Collections;
+import java.util.List;
+
+public class Inventory {
+    private Long id;
+    private List<Item> inventoryItems;
+
+    public Inventory() {
+    }
+
+    public Inventory(Long id, List<Item> inventoryItems) {
+        this.id = id;
+        this.inventoryItems = inventoryItems;
+    }
+
+    public List<Item> getInventoryItems() {
+        return Collections.unmodifiableList(this.inventoryItems);
+    }
+
+    public void addItem(Item item) {
+        this.inventoryItems.add(item);
+        item.isInInventory();
+    }
+
+    public void removeItem(Item itemToRemove, Coordinates coordinates) {
+        if(this.inventoryItems.contains(itemToRemove) == false){
+            throw new IllegalArgumentException("You cannot drop an item that you do not possess");
+        }
+        this.inventoryItems.removeIf((item -> item.getId().equals(itemToRemove.getId())));
+        itemToRemove.isRemovedFromInventory(coordinates.getX(), coordinates.getY());
+    }
+}

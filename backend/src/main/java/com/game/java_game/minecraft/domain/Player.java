@@ -2,53 +2,55 @@ package com.game.java_game.minecraft.domain;
 
 import com.game.java_game.minecraft.domain.enums.Direction;
 
-public class Player {
+public class Player extends Character {
     private Long id;
     private String username;
-    private Number health;
-    private Number experience;
-    private Cordinations cordinations;
 
-    public Player(){
-
-    }
-
-    public Player(Long id, String username, Number health, Number experience, Cordinations cordinations) {
+    public Player(Long id, String username, int health, int experience, Inventory inventory, Coordinates coordinates) {
+        super(health, experience, inventory, coordinates);
         this.id = id;
         this.username = username;
-        this.health = health;
-        this.experience = experience;
-        this.cordinations = cordinations;
     }
-
 
     public Long getId() {
         return id;
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
-    public Number getHealth() {
-        return health;
+    public void pickUpItem(Item item) {
+        int playerY = this.coordinates.getY();
+        int playerX = this.coordinates.getX();
+        int itemY = item.getY();
+        int itemX = item.getX();
+
+        if (playerY == itemY && playerX == itemX) {
+            this.inventory.addItem(item);
+        }
     }
 
-    public Number getExperience() {
-        return experience;
+    public void dropItem(Item item) {
+        this.inventory.removeItem(item, this.coordinates);
     }
 
-    public void update(Number health, Number experience) {
-        this.health = health;
-        this.experience = experience;
+    protected  void move(Direction direction) {
+        this.coordinates.update(direction);
     }
 
-    public void updateUserName(String username){
-        this.username = username;
+    @Override
+    public String toString() {
+        return String.format("""
+                {
+                  "id": %d,
+                  "username": "%s",
+                  "health": %d,
+                  "experience": %d,
+                  "coordinates": %s
+                }
+                """, this.getId(), this.getUsername(), this.getHealth(), this.getExperience(),
+                this.getCoordinates().toString());
     }
 
-
-    public void updateLocation(Direction direction) {
-        switch ()
-    }
 }

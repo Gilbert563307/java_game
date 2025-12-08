@@ -1,12 +1,18 @@
 package com.game.java_game;
 
-import com.game.java_game.minecraft.domain.Cordinations;
-import com.game.java_game.minecraft.domain.Game;
-import com.game.java_game.minecraft.domain.Player;
+import java.util.ArrayList;
 
-import com.game.java_game.minecraft.domain.enums.Direction;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.game.java_game.minecraft.domain.Coordinates;
+import com.game.java_game.minecraft.domain.Game;
+import com.game.java_game.minecraft.domain.Inventory;
+import com.game.java_game.minecraft.domain.Player;
+import com.game.java_game.minecraft.domain.enums.Direction;
 
 @SpringBootTest
 class JavaGameApplicationTests {
@@ -16,17 +22,36 @@ class JavaGameApplicationTests {
         Game gameOne = new Game(1L);
         gameOne.startGame(null);
 
-        Cordinations cordinations = new Cordinations(0L, 0, 0, 0);
-        Player player1 = new Player(0L, "James", 100, 10, cordinations);
-        Player player2 = new Player(1L, "Doe", 100, 10, cordinations);
-        gameOne.joinGame(player1);
-        gameOne.joinGame(player2);
+        Inventory inventory = new Inventory(1L, new ArrayList<>());
+       
+        Player playerOne = new Player(1L, "James_712", 100, 0, inventory, new Coordinates(1L, 0, 0));
+        Player playerTwo = new Player(2L, "Thomas_771", 100, 0, inventory, new Coordinates(2L, 0, 0));
 
-        gameOne.movePlayer(player1, Direction.RIGHT);
-        gameOne.movePlayer(player2, Direction.LEFT);
+        gameOne.joinGame(playerOne);
+
+        assertTrue(gameOne.isGameStarted(), "Game is not started");
+        assertEquals(gameOne.getPlayerList().size(), 1);
+
+        // Check that moving a player not in the game throws the correct exception
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            gameOne.movePlayer(playerTwo, Direction.UP);
+        });
+        assertEquals("You cannot move a player who is not in the game", exception.getMessage());
+
+        gameOne.joinGame(playerTwo);
+        assertEquals(gameOne.getPlayerList().size(), 2);
+
+        gameOne.movePlayer(playerTwo, Direction.UP);
+        
+        gameOne.movePlayer(playerOne, Direction.LEFT);
+        gameOne.movePlayer(playerOne, Direction.LEFT);
+        gameOne.movePlayer(playerOne, Direction.LEFT);
 
 
-        System.out.println(gameOne.getGameSession());
+        //todo make pick up item method
+
+        System.out.println(playerTwo.getCoordinates());
+        System.out.println(playerOne.getCoordinates());
     }
 
 }
