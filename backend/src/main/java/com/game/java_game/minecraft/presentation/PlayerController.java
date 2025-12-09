@@ -4,13 +4,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.game.java_game.minecraft.application.service.GameService;
+import com.game.java_game.minecraft.application.service.PlayerService;
 import com.game.java_game.minecraft.domain.Player;
+import com.game.java_game.minecraft.domain.dto.PlayerDto;
+import com.game.java_game.minecraft.presentation.dto.CreatePlayerDto;
 import com.game.java_game.security.UserProfile;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -26,8 +31,9 @@ public class PlayerController {
     }
 
     @PostMapping
-    public String postMethodName(@RequestBody String entity) {
-        this.playerService.createPlayer();
+    public ResponseEntity<PlayerDto> createPlayer(@RequestBody @Valid CreatePlayerDto createPlayerDto) {
+        PlayerDto playerDto = this.playerService.createPlayer(createPlayerDto);
+        return ResponseEntity.ok(playerDto);
     }
     
 

@@ -39,6 +39,8 @@ public class UserProfileResolver implements HandlerMethodArgumentResolver {
         if (username != null) {
             return new UserProfile(username);
         } else {
+            String path = webRequest.getContextPath();
+            System.out.println(path);
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No user profile found");
         }
     }
