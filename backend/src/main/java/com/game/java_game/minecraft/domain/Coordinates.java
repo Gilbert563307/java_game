@@ -1,6 +1,7 @@
 package com.game.java_game.minecraft.domain;
 
 import com.game.java_game.minecraft.domain.enums.Direction;
+import com.game.java_game.minecraft.presentation.exception.BadRequestException;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -70,7 +71,7 @@ public class Coordinates {
             this.updateCoordinates(this.getY(), this.getX() - 1);
             break;
         default:
-            throw new AssertionError("No direction found to update coordinates");
+            throw new BadRequestException("No direction found to update coordinates");
         }
     }
 

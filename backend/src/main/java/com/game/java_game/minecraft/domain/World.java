@@ -21,8 +21,8 @@ public class World {
     private List<Item> lootItems;
 
     // World size
-    public static final int WORLD_WIDTH = 100;
-    public static final int WORLD_HEIGHT = 100;
+    public static final int WORLD_WIDTH = 15;
+    public static final int WORLD_HEIGHT = 15;
 
     public World() {
 
