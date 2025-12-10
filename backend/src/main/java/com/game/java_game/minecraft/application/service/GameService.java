@@ -3,6 +3,7 @@ package com.game.java_game.minecraft.application.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.game.java_game.minecraft.domain.dto.PlayerDto;
 import org.springframework.stereotype.Service;
 
 import com.game.java_game.minecraft.data.GameRepository;
@@ -89,4 +90,9 @@ public class GameService {
         return player;
     }
 
+    public PlayerDto getPlayerInGame(Long gameId, Long playerId) {
+        Game game = this.getGameById(gameId);
+        Player player = game.getPlayerById(playerId);
+        return GameMapper.toPlayerDto(player);
+    }
 }

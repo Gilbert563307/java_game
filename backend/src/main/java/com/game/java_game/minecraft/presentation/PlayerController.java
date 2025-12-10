@@ -35,16 +35,15 @@ public class PlayerController {
         PlayerDto playerDto = this.playerService.createPlayer(createPlayerDto);
         return ResponseEntity.ok(playerDto);
     }
-    
 
-    @PostMapping("/game/{gameId}")
+    @PostMapping("/{gameId}/game")
     public ResponseEntity<Void> join(UserProfile profile, @PathVariable Long gameId) {
         Player player = this.gameService.getPlayerByUserName(profile.getUsername());
         this.gameService.joinGame(gameId, player);
         return ResponseEntity.created(null).build();
     }
 
-    @PutMapping("/game/{gameId}")
+    @PutMapping("/{gameId}/game")
     public ResponseEntity<Void> leave(UserProfile profile, @PathVariable Long gameId) {
         Player player = this.gameService.getPlayerByUserName(profile.getUsername());
         this.gameService.leaveGame(gameId, player);

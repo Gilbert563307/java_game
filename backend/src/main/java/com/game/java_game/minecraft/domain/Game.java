@@ -76,6 +76,10 @@ public class Game {
         player.dropItem(item);
     }
 
+    public Player getPlayerById(Long playerId) {
+        return this.session.getPlayerById(playerId);
+    }
+
     public List<String> getPlayerList() {
         return this.session.getPlayersNames();
     }

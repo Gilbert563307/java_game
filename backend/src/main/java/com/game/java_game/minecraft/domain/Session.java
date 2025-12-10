@@ -40,6 +40,15 @@ public class Session {
         }
     }
 
+    public Player getPlayerById(Long playerId) {
+        return this.playerList
+                .stream()
+                .filter(p -> p.getId().equals(playerId))
+                .findFirst()
+                .orElseThrow(() ->
+                        new RuntimeException("Player is not in this game"));
+    }
+
     public boolean isPlayerInSession(Player player) {
         return this.playerList.contains(player);
     }

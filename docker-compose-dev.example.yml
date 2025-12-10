@@ -1,26 +1,17 @@
 services:
   java_game:
-    container_name: postgres-spring-boot
-    image: postgres:latest
+    container_name: postgres-spring-boot-java_game
+    image: postgres:18
     environment:
       #password is a must
       POSTGRES_PASSWORD: {password}
-      PGDATA: /data/postgres
     volumes:
       # required created initial db and user
       - "./database/mount:/docker-entrypoint-initdb.d"
       - data:/var/lit/postgresql/data
     ports:
       # first port can be anything second one must be 5432
-      - "5432:5432"
-    networks:
-      - game_db
-    restart: unless-stopped
-
-#multiple containers can talk if they have same network
-networks:
-  game_db:
-    driver: bridge
+      - "15433:5432"
 
 volumes:
   data:

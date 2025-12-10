@@ -4,7 +4,7 @@ spring.application.name=java_game
 #behaivour for how application works
 #configure for application to connect to database #mapped first port in docker compose file
 #names comes from the init sql file in the database mount folder
-spring.datasource.url=jdbc:postgresql://localhost:15432/{dbname}
+spring.datasource.url=jdbc:postgresql://localhost:5432/{dbname}
 spring.datasource.username=
 spring.datasource.password=
 

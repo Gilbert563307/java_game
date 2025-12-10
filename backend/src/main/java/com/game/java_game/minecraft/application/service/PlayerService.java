@@ -6,8 +6,9 @@ import com.game.java_game.minecraft.domain.Player;
 import com.game.java_game.minecraft.domain.dto.PlayerDto;
 import com.game.java_game.minecraft.domain.mapper.GameMapper;
 import com.game.java_game.minecraft.presentation.dto.CreatePlayerDto;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class PlayerService {
 
     private PlayerRepository playerRepository;

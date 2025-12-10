@@ -1,13 +1,8 @@
 package com.game.java_game.minecraft.presentation;
 
+import com.game.java_game.minecraft.domain.dto.PlayerDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.game.java_game.minecraft.application.service.GameService;
 import com.game.java_game.minecraft.domain.dto.GameDto;
@@ -26,22 +21,39 @@ public class GameController {
         this.gameService = gameService;
     }
 
+    //get the player in current game session
+    @GetMapping("/{gameId}/player/{playerId}")
+    public ResponseEntity<PlayerDto> getInGamePlayer(@PathVariable Long gameId, @PathVariable Long playerId){
+        PlayerDto playerDto = this.gameService.getPlayerInGame(gameId, playerId);
+        return ResponseEntity.ok(playerDto);
+    }
+
+    //get current game status
     @GetMapping("/{gameId}")
     public ResponseEntity<GameDto> getGame(@PathVariable Long gameId) {
         GameDto gameDto = this.gameService.getGameStatus(gameId);
         return ResponseEntity.ok(gameDto);
     }
 
+    //create a game & start a game
     @PostMapping
-    public ResponseEntity<GameDto> create(UserProfile profile, @Valid @RequestBody CreateGameDto createGameDto) {
+    public ResponseEntity<GameDto> startGame(UserProfile profile, @Valid @RequestBody CreateGameDto createGameDto) {
         GameDto gameDto = this.gameService.startGame(createGameDto.getName(), profile.getUsername());
         return ResponseEntity.ok(gameDto);
     }
 
+    //quit a game
     @DeleteMapping("/{gameId}")
     public ResponseEntity<Void> quitGame(@PathVariable Long gameId) {
         this.gameService.quitGame(gameId);
         return ResponseEntity.ok(null);
     }
+
+    @PatchMapping("/{gameId}/players/{playerId}/position")
+    public  ResponseEntity<PlayerDto> movePlayer(@PathVariable){
+
+    }
+
+
 
 }
