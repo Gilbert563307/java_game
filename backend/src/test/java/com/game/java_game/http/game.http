@@ -1,29 +1,75 @@
-### create a world
+### =========================================
+### Create a game (start a world)
+### =========================================
 POST http://localhost:8080/api/v1/game
 Content-Type: application/json
-X-User: steve
 
 {
-  "name": "world 2"
+  "worldName": "world-1",
+  "username": "steve"
+}
+
+### =========================================
+### Get game status
+### =========================================
+GET http://localhost:8080/api/v1/game/1
+Accept: application/json
+
+
+### =========================================
+### Join game (by username)
+### =========================================
+POST http://localhost:8080/api/v1/game/1/players
+Content-Type: application/json
+
+{
+  "username": "alex"
+}
+
+### =========================================
+### Join game (another player)
+### =========================================
+POST http://localhost:8080/api/v1/game/1/players
+Content-Type: application/json
+
+{
+  "username": "notch"
+}
+
+### =========================================
+### Get player in game
+### =========================================
+GET http://localhost:8080/api/v1/game/1/player/1
+Accept: application/json
+
+
+### =========================================
+### Move player in game
+### =========================================
+PATCH http://localhost:8080/api/v1/game/1/players/1/position
+Content-Type: application/json
+
+{
+  "direction": "DOWN"
+}
+
+### =========================================
+### Move player (invalid – missing direction)
+### =========================================
+PATCH http://localhost:8080/api/v1/game/1/players/1/position
+Content-Type: application/json
+
+{
 }
 
 
-### join a world
-POST http://localhost:8080/api/v1/player/game/1
-Content-Type: application/json
-X-User: James
+### =========================================
+### Leave game
+### =========================================
+DELETE http://localhost:8080/api/v1/game/1/players/1
 
 
-
-### leave a world
-PUT http://localhost:8080/api/v1/player/game/1
-Content-Type: application/json
-X-User: James
-
-
-### get a world status
-GET http://localhost:8080/api/v1/game/1
-Content-Type: application/json
-X-User: steve
-
-
+### =========================================
+### Quit game (delete game)
+### =========================================
+DELETE http://localhost:8080/api/v1/game/1

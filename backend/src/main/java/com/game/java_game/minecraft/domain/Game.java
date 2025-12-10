@@ -84,27 +84,26 @@ public class Game {
         return this.session.getPlayersNames();
     }
 
-    private World getWorld() {
-        return this.world;
-    }
 
-    public String getWorldName(){
+    public String getWorldName() {
         return this.world.getName();
     }
 
-    public Long getId(){
+    public Long getId() {
         return this.id;
     }
 
-    public List<Item> getLootItems(){
+    public List<Item> getLootItems() {
         return this.world.getLootItems();
     }
 
-    public List<Player> getPlayers(){
+    public List<Player> getPlayers() {
         return this.session.getPlayerList();
     }
 
     public void quitGame() {
+        this.id = null;
+        this.session = null;
         this.gameStarted = false;
         this.world = null;
     }
