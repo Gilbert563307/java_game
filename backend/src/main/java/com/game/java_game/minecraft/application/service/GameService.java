@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.game.java_game.minecraft.data.GameRepository;
-import com.game.java_game.minecraft.data.PlayerRepository;
 import com.game.java_game.minecraft.domain.Game;
 import com.game.java_game.minecraft.domain.Player;
 import com.game.java_game.minecraft.domain.World;
@@ -14,7 +13,7 @@ import com.game.java_game.minecraft.domain.dto.GameDto;
 import com.game.java_game.minecraft.domain.dto.PlayerDto;
 import com.game.java_game.minecraft.domain.enums.Direction;
 import com.game.java_game.minecraft.domain.mapper.GameMapper;
-import com.game.java_game.minecraft.presentation.exception.BadRequestException;
+import com.game.java_game.minecraft.domain.exception.InvalidGameOperationException;
 
 import jakarta.transaction.Transactional;
 
@@ -24,7 +23,7 @@ public class GameService {
 
     private final GameRepository gameRepository;
 
-    public GameService(GameRepository gameRepository, PlayerRepository playerRepository) {
+    public GameService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
 
@@ -76,6 +75,6 @@ public class GameService {
     }
 
     private Game getGameById(Long gameId) {
-        return this.gameRepository.findById(gameId).orElseThrow(() -> new BadRequestException("Could not find game"));
+        return this.gameRepository.findById(gameId).orElseThrow(() -> new InvalidGameOperationException("Could not find game"));
     }
 }

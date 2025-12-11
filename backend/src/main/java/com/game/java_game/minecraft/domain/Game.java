@@ -3,7 +3,7 @@ package com.game.java_game.minecraft.domain;
 import java.util.List;
 
 import com.game.java_game.minecraft.domain.enums.Direction;
-import com.game.java_game.minecraft.presentation.exception.BadRequestException;
+import com.game.java_game.minecraft.domain.exception.InvalidGameOperationException;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -33,7 +33,7 @@ public class Game {
 
     public void startGame(List<Player> players) {
         if (this.gameStarted) {
-            throw new BadRequestException("Game has already started");
+            throw new InvalidGameOperationException("Game has already started");
         }
         this.session = new Session(null, players);
         this.gameStarted = true;
@@ -41,14 +41,14 @@ public class Game {
 
     public void joinGame(Player player) {
         if (!this.gameStarted) {
-            throw new BadRequestException("You cannot join the game while its not started");
+            throw new InvalidGameOperationException("You cannot join the game while its not started");
         }
         this.session.join(player);
     }
 
     public void leaveGame(Player player) {
         if (!this.gameStarted) {
-            throw new BadRequestException("You cannot leave the game while its not started");
+            throw new InvalidGameOperationException("You cannot leave the game while its not started");
         }
         this.session.leave(player);
     }
@@ -56,7 +56,7 @@ public class Game {
     public void movePlayer(Player player, Direction direction) {
         boolean isPlayerInCurrentSession = this.session.isPlayerInSession(player);
         if (!isPlayerInCurrentSession) {
-            throw new BadRequestException("You cannot move a player who is not in the game");
+            throw new InvalidGameOperationException("You cannot move a player who is not in the game");
         }
         player.move(direction);
     }
@@ -64,7 +64,7 @@ public class Game {
     public void pickUpItem(Player player, Item item) {
         boolean isPlayerInCurrentSession = this.session.isPlayerInSession(player);
         if (!isPlayerInCurrentSession) {
-            throw new BadRequestException("You cannot move pick up an item. Because you are not in a game");
+            throw new InvalidGameOperationException("You cannot move pick up an item. Because you are not in a game");
         }
         player.pickUpItem(item);
     }
@@ -72,7 +72,7 @@ public class Game {
     public void dropUpItem(Player player, Item item) {
         boolean isPlayerInCurrentSession = this.session.isPlayerInSession(player);
         if (!isPlayerInCurrentSession) {
-            throw new BadRequestException("You cannot move pick up an item. Because you are not in a game");
+            throw new InvalidGameOperationException("You cannot move pick up an item. Because you are not in a game");
         }
         player.dropItem(item);
     }
