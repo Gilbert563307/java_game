@@ -1,7 +1,8 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import "./features/canvas/canvas-grid.ts";
-import "./features/canvas/moo-canvas.ts";
+// import "./features/canvas/canvas-grid.ts";
+// import "./features/canvas/moo-canvas.ts";
+import "./features/canvas/canvas-game.ts";
 
 @customElement("main-game")
 export class MainGame extends LitElement {
@@ -20,7 +21,7 @@ export class MainGame extends LitElement {
   ];
 
   render() {
-    return html` <moo-canvas></moo-canvas> `;
+    return html` <canvas-game></canvas-game> `;
   }
 }
 
