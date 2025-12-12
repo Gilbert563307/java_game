@@ -55,30 +55,30 @@ export class Grid extends LitElement {
     if (!canvas) return;
 
     this.canvas = canvas;
-    this.setItemsToCanvas(8);
+    
   }
 
-  setItemsToCanvas(count = 5) {
-    this.items = [];
+  // setItemsToCanvas(count = 5) {
+  //   this.items = [];
 
-    for (let i = 0; i < count; i++) {
-      this.items.push({
-        x: Math.floor(Math.random() * (this.canvas.width - 20)),
-        y: Math.floor(Math.random() * (this.canvas.height - 20)),
-        size: 20,
-        color: "brown",
-      });
-    }
+  //   for (let i = 0; i < count; i++) {
+  //     this.items.push({
+  //       x: Math.floor(Math.random() * (this.canvas.width - 20)),
+  //       y: Math.floor(Math.random() * (this.canvas.height - 20)),
+  //       size: 20,
+  //       color: "brown",
+  //     });
+  //   }
 
-    this.draw();
-  }
+  //   this.draw();
+  // }
 
-  drawItems(ctx: CanvasRenderingContext2D) {
-    for (const item of this.items) {
-      ctx.fillStyle = item.color;
-      ctx.fillRect(item.x, item.y, item.size, item.size);
-    }
-  }
+  // drawItems(ctx: CanvasRenderingContext2D) {
+  //   for (const item of this.items) {
+  //     ctx.fillStyle = item.color;
+  //     ctx.fillRect(item.x, item.y, item.size, item.size);
+  //   }
+  // }
 
   draw() {
     const ctx = this.canvas.getContext("2d");
@@ -87,9 +87,7 @@ export class Grid extends LitElement {
     // clear canvas
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // draw items
-    this.drawItems(ctx);
-
+    
     // draw player
     ctx.fillStyle = "red";
     ctx.fillRect(this.x, this.y, 20, 20);

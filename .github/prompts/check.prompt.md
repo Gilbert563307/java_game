@@ -19,7 +19,7 @@
 ### Domain / Business Logic Layer
 - Contains core business concepts and logic.
 - Independent of infrastructure concerns.
-
+Q
 ### Data / Persistence / Infrastructure Layer
 - Handles communication with external systems (e.g., databases, file systems, messaging systems).
 
