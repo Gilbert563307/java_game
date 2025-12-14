@@ -1,14 +1,7 @@
 package com.game.java_game.minecraft.presentation;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.game.java_game.minecraft.application.service.GameService;
 import com.game.java_game.minecraft.domain.dto.GameDto;
@@ -21,6 +14,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/game")
+@CrossOrigin(origins = "http://localhost:5173/")
 public class GameController {
 
     private final GameService gameService;
