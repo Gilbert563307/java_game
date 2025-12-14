@@ -1,3 +1,4 @@
 backend/src/main/resources/application.properties
 database/mount/init.sql
 docker-compose-dev.yml
+frontend/lit/vite-project/.env

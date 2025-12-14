@@ -3,7 +3,11 @@ import { customElement, property, state } from "lit/decorators.js";
 
 import grass from "../../assets/images/grass.png";
 import playerImage from "../../assets/images/player.png";
-import { PlayerModel } from "./model/player-model";
+import Stone from "../../assets/images/stone.png";
+import { Player } from "./model/player";
+
+import { gameController } from "../controller/game-controller";
+import { Item } from "./model/Item";
 
 @customElement("canvas-game")
 export class CanvasGame extends LitElement {
@@ -18,16 +22,46 @@ export class CanvasGame extends LitElement {
     `,
   ];
 
-  //   @property({ type: Object })
-  player: PlayerModel = new PlayerModel(0, 0, 64, 64, playerImage);
+  canvasWidth = 1000;
+  canvasHeight = 600;
+  player: Player = new Player(
+    0,
+    0,
+    64,
+    64,
+    playerImage,
+    this.canvasWidth,
+    this.canvasHeight
+  );
 
-  drawingSurface: CanvasRenderingContext2D;
-  canvasWidth: number = 1000;
-  canvasHeight: number = 600;
+  @property({ type: Array })
+  lootItems: Array<Item> = [];
+
+  ctx: CanvasRenderingContext2D;
+
+  async retrieveData() {
+    const status = await gameController.getGameStatus(1);
+    // const lootItems = status.world.lootItems;
+    this.lootItems = status.world.lootItems;
+
+    // preload loot item images
+    this.lootItems = this.lootItems.map(
+      (loot) => new Item(loot.x, loot.y, Stone)
+    );
+
+    this.lootItems.forEach((item) => item.getImage());
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.retrieveData();
+  }
 
   //after component is loaded
   protected firstUpdated(_changedProperties: PropertyValues): void {
     const canvas: HTMLCanvasElement = this.shadowRoot?.querySelector("canvas");
+    canvas.width = this.canvasWidth;
+    canvas.height = this.canvasHeight;
     const drawingSurface: CanvasRenderingContext2D = canvas?.getContext("2d");
     if (!drawingSurface) {
       return;
@@ -40,66 +74,76 @@ export class CanvasGame extends LitElement {
   }
 
   initGame(drawingSurface: CanvasRenderingContext2D) {
-    this.drawingSurface = drawingSurface;
-    this.updateCharacter();
+    this.ctx = drawingSurface;
+
+    //wait for image to load
+    const img = this.player.getImage();
+    img.onload = () => {
+      this.updateCharacter();
+    };
+    // requestAnimationFrame(this.updateCharacter);
   }
 
   draw() {
-    //wait for image to load
     //https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
-    this.player.getImage().onload = () => {
-      //clear and redraw
-      this.drawingSurface.clearRect(
-        this.player.getX(),
-        this.player.getY(),
-        this.canvasWidth,
-        this.canvasHeight
-      );
-      this.drawingSurface.drawImage(
-        this.player.getImage(),
-        Math.floor(this.player.getX()),
-        Math.floor(this.player.getY()),
-        this.player.getHeight(),
-        this.player.getWidth()
-      );
-    };
+    //clear and redraw
+    this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
-    console.log(this.drawingSurface);
-    console.log(this.player);
+    this.ctx.drawImage(
+      this.player.getImage(),
+      Math.floor(this.player.getX()),
+      Math.floor(this.player.getY()),
+      this.player.getWidth(),
+      this.player.getHeight()
+    );
+
+    // draw loot items
+    this.lootItems.forEach((item) => {
+      this.ctx.drawImage(
+        item.getImage(),
+        item.getX(),
+        item.getY(),
+        item.getWidth(),
+        item.getHeight()
+      );
+    });
+    
   }
 
-  updateCharacter() {
+  //auto bind this method to this lass
+  updateCharacter = () => {
     this.draw();
-  }
+  };
 
   handleKeyPress(event: Event, on: boolean) {
     switch (event.key) {
       case "ArrowUp":
         this.player.move("UP");
         break;
-
       case "ArrowDown":
+        this.player.move("DOWN");
         break;
 
       case "ArrowLeft":
+        this.player.move("LEFT");
         break;
       case "ArrowRight":
+        this.player.move("RIGHT");
         break;
 
       default:
         break;
     }
+
     this.updateCharacter();
+    // console.log(this.ctx);
+    console.log(this.player);
   }
 
   render() {
     return html`
-      <section tabindex="0">
-        <canvas
-          @keydown=${(e: Event) => this.handleKeyPress(e, true)}
-          width="${this.canvasWidth}"
-          height="${this.canvasHeight}"
-        ></canvas>
+      <section tabindex="0" @keydown=${this.handleKeyPress}>
+        <canvas></canvas>
       </section>
     `;
   }
