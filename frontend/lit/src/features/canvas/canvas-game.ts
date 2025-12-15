@@ -77,8 +77,8 @@ export class CanvasGame extends LitElement {
     this.ctx = drawingSurface;
 
     //wait for image to load
-    const img = this.player.getImage();
-    img.onload = () => {
+    const playerImage = this.player.getImage();
+    playerImage.onload = () => {
       this.updateCharacter();
     };
     // requestAnimationFrame(this.updateCharacter);
