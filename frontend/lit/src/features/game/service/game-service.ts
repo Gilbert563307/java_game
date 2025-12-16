@@ -1,3 +1,5 @@
+import type { GameDto, PlayerDto } from "../../../shared/types/types";
+
 class GameService {
   baseUrl: string;
   constructor() {
@@ -5,26 +7,39 @@ class GameService {
   }
 
   // Create a game
-  async createGame(worldName: string, username: string) {
+  async createGame(payload: {
+    worldName: string;
+    username: string;
+  }): Promise<GameDto> {
     const response = await fetch(`${this.baseUrl}/game`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ worldName, username }),
+      body: JSON.stringify(payload),
     });
-    return response.json();
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.message ?? "Failed to create game");
+    }
+    return data;
   }
 
   // Get game status
-  async getGameStatus(gameId: number) {
+  async getGameStatus(gameId: number): Promise<GameDto> {
     const response = await fetch(`${this.baseUrl}/game/${gameId}`, {
       method: "GET",
       headers: { Accept: "application/json" },
     });
-    return response.json();
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.message ?? "Failed to get game status");
+    }
+    return data;
   }
 
   // Join game
-  async joinGame(gameId: number, username: string) {
+  async joinGame(gameId: number, username: string): Promise<void> {
     const response = await fetch(`${this.baseUrl}/game/${gameId}/players`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -34,7 +49,10 @@ class GameService {
   }
 
   // Get player in game
-  async getPlayer(gameId: number, playerId: number) {
+  async getPlayer(
+    gameId: number,
+    playerId: number
+  ): Promise<PlayerDto | Object> {
     const response = await fetch(
       `${this.baseUrl}/game/${gameId}/player/${playerId}`,
       {
@@ -42,11 +60,20 @@ class GameService {
         headers: { Accept: "application/json" },
       }
     );
-    return response.json();
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data?.message ?? "Failed to get player status");
+    }
+    return data;
   }
 
   // Move player
-  async movePlayer(gameId: number, playerId: number, direction: string) {
+  async movePlayer(
+    gameId: number,
+    playerId: number,
+    direction: string
+  ): Promise<PlayerDto> {
     const response = await fetch(
       `${this.baseUrl}/game/${gameId}/players/${playerId}/position`,
       {
@@ -59,7 +86,7 @@ class GameService {
   }
 
   // Leave game
-  async leaveGame(gameId: number, playerId: number) {
+  async leaveGame(gameId: number, playerId: number): Promise<void> {
     const response = await fetch(
       `${this.baseUrl}/game/${gameId}/players/${playerId}`,
       {
@@ -70,7 +97,7 @@ class GameService {
   }
 
   // Quit game
-  async quitGame(gameId: number) {
+  async quitGame(gameId: number): Promise<void> {
     const response = await fetch(`${this.baseUrl}/game/${gameId}`, {
       method: "DELETE",
     });
