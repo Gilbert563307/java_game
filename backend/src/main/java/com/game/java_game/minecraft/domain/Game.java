@@ -22,6 +22,9 @@ public class Game {
     @OneToOne(targetEntity = Session.class, cascade = CascadeType.ALL, orphanRemoval = true)
     private Session session;
 
+    @OneToOne(targetEntity = Player.class, cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private Player sessionOwner;
+
     public Game() {
 
     }
@@ -31,11 +34,12 @@ public class Game {
         this.world = world;
     }
 
-    public void startGame(List<Player> players) {
+    public void startGame(List<Player> players, Player sessionOwner) {
         if (this.gameStarted) {
             throw new InvalidGameOperationException("Game has already started");
         }
         this.session = new Session(null, players);
+        this.sessionOwner = sessionOwner;
         this.gameStarted = true;
     }
 
@@ -102,7 +106,15 @@ public class Game {
         return this.session.getPlayerList();
     }
 
-    public void quitGame() {
+    
+    public Player getSessionOwner() {
+        return sessionOwner;
+    }
+
+    public void quitGame(Player player) {
+        if(!player.getId().equals(sessionOwner.getId())){
+            throw new InvalidGameOperationException("You cannot quit the game if you do not own it");
+        }
         this.id = null;
         this.session = null;
         this.gameStarted = false;

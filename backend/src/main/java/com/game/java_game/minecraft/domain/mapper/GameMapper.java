@@ -8,6 +8,7 @@ import com.game.java_game.minecraft.domain.Inventory;
 import com.game.java_game.minecraft.domain.Player;
 import com.game.java_game.minecraft.domain.dto.GameDto;
 import com.game.java_game.minecraft.domain.dto.PlayerDto;
+import com.game.java_game.minecraft.domain.dto.StartGameDto;
 import com.game.java_game.minecraft.domain.dto.WorldMapDto;
 
 public class GameMapper {
@@ -23,5 +24,9 @@ public class GameMapper {
     public static PlayerDto toPlayerDto(Player player) {
         return new PlayerDto(player.getId(), player.getUsername(), player.getHealth(), player.getExperience(),
                 player.getInventory(), player.getCoordinates());
+    }
+
+    public static StartGameDto toStartGameDto(Game game, Player sessionOwner) {
+        return new StartGameDto(game.getId(), game.getWorldName(), new WorldMapDto(game.getLootItems(), game.getPlayers()), sessionOwner.getId());
     }
 }

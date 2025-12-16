@@ -1,13 +1,9 @@
 import { LitElement, html, css, unsafeCSS, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-
-import grass from "../../assets/images/grass.png";
-import playerImage from "../../assets/images/player.png";
-import Stone from "../../assets/images/stone.png";
-import { Player } from "../game/model/player";
-
-import { gameController } from "../game/controller/game-controller";
-import { Item } from "../game/model/Item";
+import grass from "../../../assets/images/grass.png";
+import playerImage from "../../../assets/images/player.png";
+import { Player } from "../model/player";
+import type { Item } from "../model/Item";
 
 @customElement("canvas-game")
 export class CanvasGame extends LitElement {
@@ -22,8 +18,16 @@ export class CanvasGame extends LitElement {
     `,
   ];
 
-  canvasWidth = 1000;
-  canvasHeight = 600;
+  scope: Document = document;
+
+  @property({ type: Array })
+  lootItems: Array<Item> = [];
+
+  @property({type: String})
+  eventName: string ="";
+
+  canvasWidth: number = 1000;
+  canvasHeight: number = 600;
   player: Player = new Player(
     0,
     0,
@@ -34,28 +38,7 @@ export class CanvasGame extends LitElement {
     this.canvasHeight
   );
 
-  @property({ type: Array })
-  lootItems: Array<Item> = [];
-
   ctx: CanvasRenderingContext2D;
-
-  async retrieveData() {
-    const status = await gameController.getGameStatus(1);
-    // const lootItems = status.world.lootItems;
-    this.lootItems = status.world.lootItems;
-
-    // preload loot item images
-    this.lootItems = this.lootItems.map(
-      (loot) => new Item(loot.x, loot.y, Stone)
-    );
-
-    this.lootItems.forEach((item) => item.getImage());
-  }
-
-  connectedCallback(): void {
-    super.connectedCallback();
-    this.retrieveData();
-  }
 
   //after component is loaded
   protected firstUpdated(_changedProperties: PropertyValues): void {
@@ -69,7 +52,7 @@ export class CanvasGame extends LitElement {
     this.initGame(drawingSurface);
 
     // Automatically focus the section so keyboard works
-    const section = this.shadowRoot?.querySelector("section");
+    const section: HTMLElement = this.shadowRoot?.querySelector("section");
     section?.focus();
   }
 
@@ -107,7 +90,6 @@ export class CanvasGame extends LitElement {
         item.getHeight()
       );
     });
-    
   }
 
   //auto bind this method to this lass
@@ -115,7 +97,18 @@ export class CanvasGame extends LitElement {
     this.draw();
   };
 
-  handleKeyPress(event: Event, on: boolean) {
+  movePlayer() {
+    const movePlayerEvent = new CustomEvent(this.eventName, {
+      detail: {
+        playerCoordinates: this.player.getCoordinates(),
+      },
+      bubbles: true,
+      composed: true,
+    });
+    this.scope.dispatchEvent(movePlayerEvent);
+  }
+
+  handleKeyPress(event: KeyboardEvent, moving: boolean) {
     switch (event.key) {
       case "ArrowUp":
         this.player.move("UP");
@@ -136,13 +129,18 @@ export class CanvasGame extends LitElement {
     }
 
     this.updateCharacter();
-    // console.log(this.ctx);
-    console.log(this.player);
+    if (moving === false) {
+      this.movePlayer();
+    }
   }
 
   render() {
     return html`
-      <section tabindex="0" @keydown=${this.handleKeyPress}>
+      <section
+        tabindex="0"
+        @keydown=${(e: KeyboardEvent) => this.handleKeyPress(e, true)}
+        @keyup=${(e: KeyboardEvent) => this.handleKeyPress(e, false)}
+      >
         <canvas></canvas>
       </section>
     `;

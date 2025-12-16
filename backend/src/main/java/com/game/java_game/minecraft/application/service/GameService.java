@@ -11,6 +11,7 @@ import com.game.java_game.minecraft.domain.Player;
 import com.game.java_game.minecraft.domain.World;
 import com.game.java_game.minecraft.domain.dto.GameDto;
 import com.game.java_game.minecraft.domain.dto.PlayerDto;
+import com.game.java_game.minecraft.domain.dto.StartGameDto;
 import com.game.java_game.minecraft.domain.enums.Direction;
 import com.game.java_game.minecraft.domain.mapper.GameMapper;
 import com.game.java_game.minecraft.domain.exception.InvalidGameOperationException;
@@ -27,13 +28,14 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public GameDto startGame(String worldName, String playerName) {
+    public StartGameDto startGame(String worldName, String playerName) {
         Game game = new Game(null, new World(null, worldName));
         List<Player> players = new ArrayList<>();
-        players.add(GameMapper.toPlayerEntity(playerName));
-        game.startGame(players);
+        Player sessionOwner = GameMapper.toPlayerEntity(playerName);
+        players.add(sessionOwner);
+        game.startGame(players, sessionOwner);
         this.gameRepository.save(game);
-        return GameMapper.toGameDto(game);
+        return GameMapper.toStartGameDto(game, sessionOwner);
     }
 
     public void quitGame(Long gameId) {

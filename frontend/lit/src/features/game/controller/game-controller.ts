@@ -1,8 +1,10 @@
-import { ALERT_TYPES } from "../../../config/constants";
+import { ALERT_TYPES, GAME_ID } from "../../../config/constants";
+import useCookieStorage from "../../../shared/helpers/use-cookie-storage";
 import { notificationSubjectService } from "../../../shared/observers/notification-subject-service";
 import type { GameDto, PlayerDto } from "../../../shared/types/types";
 import { gameService } from "../service/game-service";
 
+const { createCookie, readCookie } = useCookieStorage();
 class GameController {
   #setMessageToUser(message: string) {
     if (message != "" || message != undefined) {
@@ -24,7 +26,10 @@ class GameController {
         return {};
       }
 
-      return await gameService.createGame(payload);
+      const gameDto: GameDto = await gameService.createGame(payload);
+      createCookie(GAME_ID, String(gameDto.id), 1, "/", "");
+      this.createGame(PLAYER_ID, String(gameDto.))
+      return gameDto;
     } catch (error: unknown) {
       this.#setMessageToUser(error.message);
       return {};
@@ -32,8 +37,13 @@ class GameController {
   }
 
   // Get game status
-  async getGameStatus(gameId: number): Promise<GameDto | Object> {
+  async getGameStatus(): Promise<GameDto | Object> {
     try {
+      const gameId: string | null = readCookie(GAME_ID);
+      if(gameId == null){
+        this.#setMessageToUser("Failed to fetch game status");
+        return {};
+      }
       return await gameService.getGameStatus(gameId);
     } catch (error: unknown) {
       this.#setMessageToUser(error.message);

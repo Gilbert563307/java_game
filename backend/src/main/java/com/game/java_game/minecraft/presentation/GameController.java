@@ -6,9 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import com.game.java_game.minecraft.application.service.GameService;
 import com.game.java_game.minecraft.domain.dto.GameDto;
 import com.game.java_game.minecraft.domain.dto.PlayerDto;
+import com.game.java_game.minecraft.domain.dto.StartGameDto;
 import com.game.java_game.minecraft.presentation.dto.JoinGameDto;
 import com.game.java_game.minecraft.presentation.dto.MovePlayerDto;
-import com.game.java_game.minecraft.presentation.dto.StartGameDto;
+import com.game.java_game.minecraft.presentation.dto.StartAndCreateGameDto;
 
 import jakarta.validation.Valid;
 
@@ -39,9 +40,9 @@ public class GameController {
 
     // create a game & start a game
     @PostMapping
-    public ResponseEntity<GameDto> startGame(@Valid @RequestBody StartGameDto startGameDto) {
-        GameDto gameDto = this.gameService.startGame(startGameDto.worldName(), startGameDto.username());
-        return ResponseEntity.ok(gameDto);
+    public ResponseEntity<StartGameDto> startGame(@Valid @RequestBody StartAndCreateGameDto payload) {
+        StartGameDto startGameDto = this.gameService.startGame(payload.worldName(), payload.username());
+        return ResponseEntity.ok(startGameDto);
     }
 
     // quit a game

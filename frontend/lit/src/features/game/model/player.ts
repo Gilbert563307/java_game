@@ -9,7 +9,9 @@ export class Player {
   #image: HTMLImageElement;
   #maxWidth: number;
   #maxHeight: number;
-  
+
+  // #movingUp: boolean = false
+
   constructor(
     x: number,
     y: number,
@@ -49,11 +51,16 @@ export class Player {
     return this.#image;
   }
 
+  getCoordinates(): { x: number; y: number } {
+    return { x: this.x, y: this.y };
+  }
+
   move(direction: Direction) {
     if (direction === "UP") {
       const newY = this.y + -5;
+      
       //Canvas top border
-      if (newY > 0) {
+      if (newY >= 0) {
         this.y = newY;
       }
     }

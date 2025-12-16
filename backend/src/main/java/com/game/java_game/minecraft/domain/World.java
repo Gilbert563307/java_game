@@ -67,6 +67,7 @@ public class World {
         lootItems.add(createItem(null, "Bow", random));
         lootItems.add(createItem(null, "Arrow", random));
         lootItems.add(new Item(null, "Magic brush", new Coordinates(null, 0, 0)));
+        lootItems.add(new Item(null, "Test block", new Coordinates(null, 415, 535)));
     }
 
     private Item createItem(Long itemId, String name, Random random) {
