@@ -5,7 +5,7 @@ POST http://localhost:8080/api/v1/game
 Content-Type: application/json
 
 {
-  "worldName": "world-1",
+  "worldName": "",
   "username": "steve"
 }
 

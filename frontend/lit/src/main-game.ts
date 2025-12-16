@@ -4,6 +4,7 @@ import { customElement, property, state } from "lit/decorators.js";
 // import "./features/canvas/moo-canvas.ts";
 import "./features/canvas/canvas-game.ts";
 
+
 @customElement("main-game")
 export class MainGame extends LitElement {
   constructor() {

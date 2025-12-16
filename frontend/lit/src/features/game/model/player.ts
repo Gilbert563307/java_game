@@ -82,8 +82,6 @@ export class Player {
     }
   }
 
-
-
   #initImage() {
     const image = new Image();
     image.src = this.imageString;

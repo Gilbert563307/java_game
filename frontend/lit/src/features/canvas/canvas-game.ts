@@ -4,10 +4,10 @@ import { customElement, property, state } from "lit/decorators.js";
 import grass from "../../assets/images/grass.png";
 import playerImage from "../../assets/images/player.png";
 import Stone from "../../assets/images/stone.png";
-import { Player } from "./model/player";
+import { Player } from "../game/model/player";
 
-import { gameController } from "../controller/game-controller";
-import { Item } from "./model/Item";
+import { gameController } from "../game/controller/game-controller";
+import { Item } from "../game/model/Item";
 
 @customElement("canvas-game")
 export class CanvasGame extends LitElement {
@@ -77,8 +77,8 @@ export class CanvasGame extends LitElement {
     this.ctx = drawingSurface;
 
     //wait for image to load
-    const img = this.player.getImage();
-    img.onload = () => {
+    const playerImage = this.player.getImage();
+    playerImage.onload = () => {
       this.updateCharacter();
     };
     // requestAnimationFrame(this.updateCharacter);
