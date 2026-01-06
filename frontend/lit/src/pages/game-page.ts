@@ -43,7 +43,8 @@ export class GamePage extends LitElement {
 
   movePlayer(event: Event){
     const playerCoordinates: {x: number, y: number} = event.detail.playerCoordinates;
-    gameController.movePlayer()
+    //TODO FIX
+    // gameController.movePlayer(playerCoordinates)
   }
 
   connectedCallback(): void {
