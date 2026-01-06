@@ -15,7 +15,6 @@ const isValidId = function (context: any, commands:  any): boolean | void {
   return true;
 };
 
-
 router.setRoutes([
     {
         path: "/",
@@ -31,5 +30,4 @@ router.setRoutes([
             return import("./pages/game-page.ts");
         }
     }
-
 ]);

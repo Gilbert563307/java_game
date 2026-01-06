@@ -98,7 +98,7 @@ export class CanvasGame extends LitElement {
   };
 
   movePlayer() {
-    const movePlayerEvent = new CustomEvent(this.eventName, {
+    const movePlayerEvent: CustomEvent = new CustomEvent(this.eventName, {
       detail: {
         playerCoordinates: this.player.getCoordinates(),
       },
