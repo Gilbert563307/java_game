@@ -109,6 +109,7 @@ export class HomePage extends LitElement {
   async startGame(event: Event) {
     const data = this.getFormData(event);
     const response = await gameController.createGame(data);
+    console.log(response);
     if(Object.keys(response).length > 0){
       Router.go("/game")
     }

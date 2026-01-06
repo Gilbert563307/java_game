@@ -28,7 +28,7 @@ class GameController {
 
       const gameDto: GameDto = await gameService.createGame(payload);
       createCookie(GAME_ID, String(gameDto.id), 1, "/", "");
-      this.createGame(PLAYER_ID, String(gameDto.))
+      // this.createGame(PLAYER_ID, String(gameDto.))
       return gameDto;
     } catch (error: unknown) {
       this.#setMessageToUser(error.message);
