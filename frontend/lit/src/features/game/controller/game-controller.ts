@@ -1,4 +1,4 @@
-import { ALERT_TYPES, GAME_ID } from "../../../config/constants";
+import { ALERT_TYPES, GAME_ID, PLAYER_ID } from "../../../config/constants";
 import useCookieStorage from "../../../shared/helpers/use-cookie-storage";
 import { notificationSubjectService } from "../../../shared/observers/notification-subject-service";
 import type { GameDto, PlayerDto } from "../../../shared/types/types";
@@ -16,10 +16,7 @@ class GameController {
   }
 
   // Create a game
-  async createGame(payload: {
-    worldName: string;
-    username: string;
-  }): Promise<GameDto | Object> {
+  async createGame(payload: { worldName: string; username: string }): Promise<GameDto | Object> {
     try {
       if (payload.username === "" || payload.worldName === "") {
         this.#setMessageToUser("Your username or world name cannot be empty");
@@ -28,7 +25,8 @@ class GameController {
 
       const gameDto: GameDto = await gameService.createGame(payload);
       createCookie(GAME_ID, String(gameDto.id), 1, "/", "");
-      // this.createGame(PLAYER_ID, String(gameDto.))
+      createCookie(PLAYER_ID, String(gameDto.id), 1, "/", "");
+
       return gameDto;
     } catch (error: unknown) {
       this.#setMessageToUser(error.message);
@@ -40,7 +38,7 @@ class GameController {
   async getGameStatus(): Promise<GameDto | Object> {
     try {
       const gameId: string | null = readCookie(GAME_ID);
-      if(gameId == null){
+      if (gameId == null) {
         this.#setMessageToUser("Failed to fetch game status");
         return {};
       }
@@ -63,13 +61,21 @@ class GameController {
   }
 
   // Move a player
-  async movePlayer(
-    gameId: number,
-    playerId: number,
-    direction: string
-  ): Promise<PlayerDto | Object> {
+  async movePlayer(gameId: number, playerId: number, direction: string): Promise<PlayerDto | Object> {
     try {
       return await gameService.movePlayer(gameId, playerId, direction);
+    } catch (error) {
+      this.#setMessageToUser(error.message);
+      return {};
+    }
+  }
+
+  //update player coordinates
+  async movePlayerToDestination(payload: { x: number; y: number }): Promise<PlayerDto | Object> {
+    try {
+      const gameId = readCookie(GAME_ID);
+      const playerId = readCookie(PLAYER_ID);
+      return await gameService.movePlayerToDestination(gameId, playerId, payload);
     } catch (error) {
       this.#setMessageToUser(error.message);
       return {};
@@ -99,10 +105,7 @@ class GameController {
   }
 
   // Get a player
-  async getPlayer(
-    gameId: number,
-    playerId: number
-  ): Promise<PlayerDto | Object> {
+  async getPlayer(gameId: number, playerId: number): Promise<PlayerDto | Object> {
     try {
       return await gameService.getPlayer(gameId, playerId);
     } catch (error: unknown) {

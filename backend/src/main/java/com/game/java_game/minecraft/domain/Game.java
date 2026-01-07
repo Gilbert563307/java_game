@@ -124,4 +124,12 @@ public class Game {
     public boolean isGameStarted() {
         return this.gameStarted;
     }
+
+    public void movePlayerToDestination(Player player, int x, int y) {
+        boolean isPlayerInCurrentSession = this.session.isPlayerInSession(player);
+        if (!isPlayerInCurrentSession) {
+            throw new InvalidGameOperationException("You cannot move a player who is not in the game");
+        }
+        player.updateCoordinates(x, y);
+    }
 }

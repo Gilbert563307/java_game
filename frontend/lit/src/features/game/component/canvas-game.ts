@@ -23,20 +23,26 @@ export class CanvasGame extends LitElement {
   @property({ type: Array })
   lootItems: Array<Item> = [];
 
-  @property({type: String})
-  eventName: string ="";
+  @property({ type: String })
+  eventName: string = "";
 
   canvasWidth: number = 1000;
   canvasHeight: number = 600;
-  player: Player = new Player(
-    0,
-    0,
-    64,
-    64,
-    playerImage,
-    this.canvasWidth,
-    this.canvasHeight
-  );
+
+  @property({ type: Number })
+  playerX: number = 0;
+
+  @property({ type: Number })
+  playerY: number = 0;
+
+  protected updated(changedProperties: PropertyValues) {
+    if (changedProperties.has("playerX") || changedProperties.has("playerY")) {
+      this.player.updateCoordinates(this.playerX, this.playerY);
+      this.updateCharacter();
+    }
+  }
+
+  player: Player = new Player(0, 0, 64, 64, playerImage, this.canvasWidth, this.canvasHeight);
 
   ctx: CanvasRenderingContext2D;
 
@@ -56,7 +62,7 @@ export class CanvasGame extends LitElement {
     section?.focus();
   }
 
-  initGame(drawingSurface: CanvasRenderingContext2D) {
+  async initGame(drawingSurface: CanvasRenderingContext2D) {
     this.ctx = drawingSurface;
 
     //wait for image to load
@@ -64,6 +70,7 @@ export class CanvasGame extends LitElement {
     playerImage.onload = () => {
       this.updateCharacter();
     };
+    console.log(this.lootItems);
     // requestAnimationFrame(this.updateCharacter);
   }
 
@@ -71,7 +78,6 @@ export class CanvasGame extends LitElement {
     //https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
     //clear and redraw
     this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-
     this.ctx.drawImage(
       this.player.getImage(),
       Math.floor(this.player.getX()),
@@ -82,13 +88,7 @@ export class CanvasGame extends LitElement {
 
     // draw loot items
     this.lootItems.forEach((item) => {
-      this.ctx.drawImage(
-        item.getImage(),
-        item.getX(),
-        item.getY(),
-        item.getWidth(),
-        item.getHeight()
-      );
+      this.ctx.drawImage(item.getImage(), item.getX(), item.getY(), item.getWidth(), item.getHeight());
     });
   }
 

@@ -24,7 +24,7 @@ public class Coordinates {
         this.x = x;
     }
 
-    private void updateCoordinates(int y, int x) {
+    public void updateCoordinates(int y, int x) {
         if (y >= 0 && y < World.WORLD_HEIGHT) {
             this.y = y;
         }

@@ -55,6 +55,11 @@ export class Player {
     return { x: this.x, y: this.y };
   }
 
+  updateCoordinates(x: number, y: number){
+    this.x = x;
+    this.y = y;
+  }
+
   move(direction: Direction) {
     if (direction === "UP") {
       const newY = this.y + -5;

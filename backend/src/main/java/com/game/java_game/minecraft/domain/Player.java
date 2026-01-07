@@ -53,6 +53,10 @@ public class Player extends Character {
         this.coordinates.update(direction);
     }
 
+    protected void updateCoordinates(int x, int y){
+        this.coordinates.updateCoordinates(y, x);
+    }
+
     @Override
     public String toString() {
         return String.format("""

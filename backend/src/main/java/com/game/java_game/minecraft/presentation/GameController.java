@@ -1,7 +1,15 @@
 package com.game.java_game.minecraft.presentation;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.game.java_game.minecraft.application.service.GameService;
 import com.game.java_game.minecraft.domain.dto.GameDto;
@@ -9,6 +17,7 @@ import com.game.java_game.minecraft.domain.dto.PlayerDto;
 import com.game.java_game.minecraft.domain.dto.StartGameDto;
 import com.game.java_game.minecraft.presentation.dto.JoinGameDto;
 import com.game.java_game.minecraft.presentation.dto.MovePlayerDto;
+import com.game.java_game.minecraft.presentation.dto.MovePlayerToDestinationDto;
 import com.game.java_game.minecraft.presentation.dto.StartAndCreateGameDto;
 
 import jakarta.validation.Valid;
@@ -59,6 +68,16 @@ public class GameController {
         PlayerDto playerDto = this.gameService.movePlayer(gameId, playerId, movePlayerDto.getDirection());
         return ResponseEntity.ok(playerDto);
     }
+
+      // move a player in the game
+    @PatchMapping("/{gameId}/players/{playerId}/coordinates")
+    public ResponseEntity<PlayerDto> movePlayerToLocation(@PathVariable Long gameId, @PathVariable Long playerId,
+            @Valid @RequestBody MovePlayerToDestinationDto movePlayerToDestinationDto) {
+      
+        PlayerDto playerDto = this.gameService.movePlayerToDestination(gameId, playerId, movePlayerToDestinationDto.getX(), movePlayerToDestinationDto.getY());
+        return ResponseEntity.ok(playerDto);
+    }
+
 
     //join the game 
     @PostMapping("/{gameId}/players")

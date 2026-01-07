@@ -14,4 +14,6 @@ export const ALERT_TYPES: ALERT_TYPES = {
   PRIMARY: 3,
 };
 
-export const GAME_ID = "GAME_ID";
+export const GAME_ID: string = "GAME_ID";
+export const PLAYER_ID: string = "PLAYER_ID";
+export const PLAYER_LOCATION: string = "PLAYER_LOCATION";

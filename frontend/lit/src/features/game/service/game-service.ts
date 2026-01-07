@@ -1,6 +1,7 @@
 import type { GameDto, PlayerDto } from "../../../shared/types/types";
 
 class GameService {
+  
   baseUrl: string;
   constructor() {
     this.baseUrl = import.meta.env.VITE_GAME_API_URL;
@@ -23,6 +24,21 @@ class GameService {
     }
     return data;
   }
+
+
+  //move player to destination 
+  async movePlayerToDestination(gameId: number, playerId: number, payload: { x: number, y: number} ): Promise<PlayerDto> {
+     const response = await fetch(
+      `${this.baseUrl}/game/${gameId}/players/${playerId}/coordinates`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
+    return response.json();
+  }
+
 
   // Get game status
   async getGameStatus(gameId: number): Promise<GameDto> {
