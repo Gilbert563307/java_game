@@ -1,0 +1,119 @@
+.game-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #3a2f25;
+  background-image:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.08) 50%, transparent 50%),
+    linear-gradient(rgba(0, 0, 0, 0.08) 50%, transparent 50%),
+    radial-gradient(rgba(0, 0, 0, 0.2), transparent 70%);
+  background-size: 32px 32px, 32px 32px, 100% 100%;
+  background-position: 0 0, 0 0, center;
+}
+
+.game-container {
+  position: relative;
+}
+
+canvas-game {
+  display: block;
+  z-index: 1;
+}
+
+/* HUD */
+.hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.health-container {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 220px;
+}
+
+.health-label {
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: black;
+  font-weight: 600;
+}
+
+.health-bar {
+  height: 18px;
+  border: 2px solid black;
+  background: #5b5b5b;
+}
+
+.health-fill {
+  height: 100%;
+  background: #39d12f;
+}
+
+.menu-buttons {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.menu-buttons button {
+  background: #8f8f8f;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.menu-buttons button:hover {
+  background: #7a7a7a;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.modal {
+  background: #c6c6c6;
+  border: 4px solid #4a4a4a;
+  width: 400px;
+  padding: 16px;
+  border-radius: 6px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.inventory-slot {
+  width: 64px;
+  height: 64px;
+  background: #9e9e9e;
+  border: 2px solid #5a5a5a;
+}
